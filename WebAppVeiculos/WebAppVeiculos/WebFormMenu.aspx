@@ -10,7 +10,7 @@
     <form id="form1" runat="server">
         <div>
             <asp:HyperLink ID="HyperLink1" runat="server" NavigateUrl="~/WebFormCadastroCliente.aspx">Cadastro de Cliente</asp:HyperLink>
-            <asp:HyperLink ID="HyperLink2" runat="server">Cadastro de Veículo</asp:HyperLink>
+            <asp:HyperLink ID="HyperLink2" runat="server" NavigateUrl="~/WebFormCadastroVeiculo.aspx">Cadastro de Veículo</asp:HyperLink>
         </div>
     </form>
 </body>

@@ -25,8 +25,9 @@
                     <td><asp:TextBox ID="TextBox_CPF" runat="server" Text=""></asp:TextBox></td>
                 </tr>
                 <tr>
-                    <td><asp:Button ID="Button_Salvar" runat="server" Text="Salvar" /></td>
-                    <td><asp:Button ID="Button_Cancelar" runat="server" Text="Cancelar" /></td>
+                    <td><asp:Button ID="Button_Salvar" runat="server" Text="Salvar" OnClick="Button_Salvar_Click" /></td>
+                    <td><asp:Button ID="Button_Cancelar" runat="server" Text="Cancelar" OnClick="Button_Cancelar_Click" /></td>
+                    <td><asp:Button ID="Button_Excluir" runat="server" Text="Excluir" OnClick="Button_Excluir_Click" /></td>
                 </tr>
             </table>
         </div>

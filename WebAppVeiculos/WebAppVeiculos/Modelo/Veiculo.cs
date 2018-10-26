@@ -33,5 +33,14 @@ namespace WebAppVeiculos.Modelo
             this.uf = auf;
 
         }
+        public Veiculo(string afabricante, string amodelo, int aano_fabricacao, string aplaca, string auf)
+        {
+            this.fabricante = afabricante;
+            this.modelo = amodelo;
+            this.ano_fabricacao = aano_fabricacao;
+            this.placa = aplaca;
+            this.uf = auf;
+
+        }
     }
 }

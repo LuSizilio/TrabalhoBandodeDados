@@ -25,6 +25,12 @@ namespace WebAppVeiculos.Modelo
             this.nome = anome;
             this.data_nascimento = adata_nascimento;
             this.cpf = acpf;
+        }
+        public Cliente(string anome, DateTime adata_nascimento, string acpf)
+        {
+            this.nome = anome;
+            this.data_nascimento = adata_nascimento;
+            this.cpf = acpf;
 
         }
     }

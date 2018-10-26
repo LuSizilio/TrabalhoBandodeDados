@@ -13,5 +13,25 @@ namespace WebAppVeiculos
         {
 
         }
+
+        protected void Button_Salvar_Click(object sender, EventArgs e)
+        {
+            DAL.DALCliente DALCliente = new DAL.DALCliente();
+            Modelo.Cliente cliente = new Modelo.Cliente(TextBox_Nome.Text, Calendar_Data.SelectedDate, TextBox_CPF.Text);
+            try
+            {
+                DALCliente.Insert(cliente);
+                Response.Redirect("~\\WebFormCadastroCliente.aspx");
+            }
+            catch
+            {
+
+            }
+        }
+
+        protected void Button_Cancelar_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("~\\WebFormCadastroCliente.aspx");
+        }
     }
 }

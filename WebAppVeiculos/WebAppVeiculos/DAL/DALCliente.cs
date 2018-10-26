@@ -50,6 +50,37 @@ namespace WebAppVeiculos.DAL
             return aListCliente;
         }
 
+        public Modelo.Cliente Select(int id)
+        {
+            Modelo.Cliente aCliente = new Modelo.Cliente();
+            // Cria Lista Vazia
+            SqlConnection conn = new SqlConnection(connectionString);
+            conn.Open();
+            SqlCommand cmd = conn.CreateCommand();
+            // define SQL do comando
+            cmd.CommandText = "Select * from Cliente where id = @id";
+            cmd.Parameters.AddWithValue("@id", id);
+            SqlDataReader dr = cmd.ExecuteReader();
+            if (dr.HasRows)
+            {
+                while (dr.Read())
+                {
+                    aCliente = new Modelo.Cliente(
+                    dr.GetInt32(0),
+                    dr.GetString(1),
+                    dr.GetDateTime(2),
+                    dr.GetString(3)
+                    );
+                }
+            }
+            // Fecha DataReader
+            dr.Close();
+            // Fecha Conexão
+            conn.Close();
+
+            return aCliente;
+        }
+
         public void Insert(Modelo.Cliente obj)
         {
             // Cria Conexão com banco de dados

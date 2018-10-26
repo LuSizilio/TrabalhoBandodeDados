@@ -22,7 +22,7 @@
                 </tr>
                 <tr>
                     <td>Ano</td>
-                    <td><asp:Calendar ID="Calendar_Ano" runat="server" ReadOnly="true"></asp:Calendar></td>
+                    <td><asp:TextBox ID="TextBox_Ano" ReadOnly="true" runat="server"></asp:TextBox></td>
                 </tr>
                 <tr>
                     <td>Placa</td>
@@ -33,8 +33,8 @@
                     <td><asp:TextBox ID="TextBox_UF" runat="server" ReadOnly="true"></asp:TextBox></td>
                 </tr>
                 <tr>
-                    <td><asp:Button ID="Button_Excluir" runat="server" Text="Excluir" /></td>
-                    <td><asp:Button ID="Button_Cancelar" runat="server" Text="Cancelar" /></td>
+                    <td><asp:Button ID="Button_Excluir" runat="server" Text="Excluir" OnClick="Button_Excluir_Click" /></td>
+                    <td><asp:Button ID="Button_Cancelar" runat="server" Text="Cancelar" OnClick="Button_Cancelar_Click" /></td>
                 </tr>
             </table>
         </div>
