@@ -80,6 +80,10 @@
     <Content Include="WebFormMenu.aspx" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DAL\DALCliente.cs" />
+    <Compile Include="DAL\DALVeiculo.cs" />
+    <Compile Include="Modelo\Cliente.cs" />
+    <Compile Include="Modelo\Veiculo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebFormAlteracaoCliente.aspx.cs">
       <DependentUpon>WebFormAlteracaoCliente.aspx</DependentUpon>
@@ -154,6 +158,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
