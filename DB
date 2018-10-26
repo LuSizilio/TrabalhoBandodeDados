@@ -1,0 +1,330 @@
+create table Cliente(
+	id int identity not null,
+	nome varchar(100) not null,
+	data_nascimento datetime not null,
+	cpf varchar(14) not null,
+	primary key(id)
+)
+
+create table Veiculo(
+	id int identity not null,
+	fabricante varchar(60) not null,
+	modelo varchar(60) not null,
+	ano_fabricacao int not null,
+	placa char(8) not null,
+	uf char(2) not null,
+	primary key(id)
+)
+
+--Stored Procedures Cliente
+
+create procedure sp_InsertCliente
+		@nome varchar(100),
+		@data_nascimento datetime,
+		@cpf varchar(14)
+as
+begin
+	if((select dbo.VerificarCpf(@cpf)) = 1)
+	begin
+		if(@data_nascimento <= GETDATE())
+		begin
+			if((@nome is null)or (replace(@nome,' ','') = ''))
+			begin
+				raiserror('Nome inválido',16,1)
+				return
+			end
+			else
+			begin
+				insert into Cliente values(@nome,@data_nascimento,@cpf)
+			end
+		end
+		else
+		begin
+			raiserror('Data de nascimento inválida',16,1)
+			return
+		end
+	end
+	else
+	begin
+		raiserror('Cpf inválido',16,1)
+		return
+	end
+end
+GO
+
+create procedure sp_UpdateCliente
+		@id int,
+		@nome varchar(100),
+		@data_nascimento datetime,
+		@cpf varchar(14)
+as
+begin
+	if((select dbo.VerificarCpf(@cpf)) = 1)
+	begin
+		if(@data_nascimento <= GETDATE())
+		begin
+			if((@nome is null)or (replace(@nome,' ','') = ''))
+			begin
+				raiserror('Nome inválido',16,1)
+				return
+			end
+			else
+			begin
+				if((select count(*) from Cliente where id = @id) != 0)
+				begin
+					Update Cliente set nome = @nome, data_nascimento = @data_nascimento, cpf = @cpf where id = @id
+				end
+				else
+				begin
+					raiserror('ID inválido',16,1)
+					return
+				end
+			end
+		end
+		else
+		begin
+			raiserror('Data de nascimento inválida',16,1)
+			return
+		end
+	end
+	else
+	begin
+		raiserror('Cpf inválido',16,1)
+		return
+	end
+end
+GO
+
+create procedure sp_DeleteCliente
+		@id int
+as
+begin
+	if((select count(*) from Cliente where id = @id) != 0)
+	begin
+		delete from Cliente where id = @id
+	end
+	else
+	begin
+		raiserror('ID inválido',16,1)
+		return
+	end
+	
+end
+GO
+
+select * from Cliente
+exec dbo.sp_InsertCliente ' ','20181026','017.137.324-32'
+exec dbo.sp_UpdateCliente  3,'Lucianao','20181026','017.137.324-32'
+exec dbo.sp_DeleteCliente 2
+
+--Stored Procedures Veiculo
+
+create procedure sp_InsertVeiculo
+		@fabricante varchar(60),
+		@modelo varchar(60),
+		@ano_fabricacao int,
+		@placa char(8),
+		@uf char(2)
+as
+begin
+	if((@fabricante is not null) and (replace(@fabricante,' ','') != ''))
+	begin
+		if((@modelo is not null) and (replace(@modelo,' ','') != ''))
+		begin
+			if(@ano_fabricacao <= DATEPART(year,getdate())+1)
+			begin
+				if(NOT(@uf = 'AC' OR @uf = 'AL' OR @uf = 'AP' OR @uf = 'AM' OR @uf = 'BA' OR @uf = 'CE' OR @uf = 'DF' OR @uf = 'ES' OR @uf = 'GO' OR 
+					   @uf = 'MA' OR @uf = 'MT' OR @uf = 'MS' OR @uf = 'MG' OR @uf = 'PA' OR @uf = 'PB' OR @uf = 'PR' OR @uf = 'PE' OR @uf = 'PI' OR 
+					   @uf = 'RJ' OR @uf = 'RN' OR @uf = 'RS' OR @uf = 'RO' OR @uf = 'RR' OR @uf = 'SC' OR @uf = 'SP' OR @uf = 'SE' OR @uf = 'TO'))
+				begin
+					rollback transaction
+					raiserror('UF Inválido',16,1)
+				end
+				else
+				begin
+					if(@placa not like '[A-Z][A-Z][A-Z]-[0-9][0-9][0-9][0-9]')
+					begin
+						rollback transaction
+						raiserror('Placa Inválida',16,1)
+					end
+					else
+					begin
+						insert into Veiculo values(@fabricante,@modelo ,@ano_fabricacao,@placa,@uf)
+					end
+				end
+			end
+			else
+			begin
+				raiserror('Ano de fabricação inválido',16,1)
+				return
+			end
+		end
+		else
+		begin
+			raiserror('Modelo inválido',16,1)
+			return
+		end
+	end
+	else
+	begin
+		raiserror('Fabricante inválido',16,1)
+		return
+	end
+end
+GO
+
+create procedure sp_UpdateVeiculo
+		@id int,
+		@fabricante varchar(60),
+		@modelo varchar(60),
+		@ano_fabricacao int,
+		@placa char(8),
+		@uf char(2)
+as
+begin
+	if((@fabricante is not null) and (replace(@fabricante,' ','') != ''))
+	begin
+		if((@modelo is not null) and (replace(@modelo,' ','') != ''))
+		begin
+			if(@ano_fabricacao <= DATEPART(year,getdate())+1)
+			begin
+				if(NOT(@uf = 'AC' OR @uf = 'AL' OR @uf = 'AP' OR @uf = 'AM' OR @uf = 'BA' OR @uf = 'CE' OR @uf = 'DF' OR @uf = 'ES' OR @uf = 'GO' OR 
+					   @uf = 'MA' OR @uf = 'MT' OR @uf = 'MS' OR @uf = 'MG' OR @uf = 'PA' OR @uf = 'PB' OR @uf = 'PR' OR @uf = 'PE' OR @uf = 'PI' OR 
+					   @uf = 'RJ' OR @uf = 'RN' OR @uf = 'RS' OR @uf = 'RO' OR @uf = 'RR' OR @uf = 'SC' OR @uf = 'SP' OR @uf = 'SE' OR @uf = 'TO'))
+				begin
+					rollback transaction
+					raiserror('UF Inválido',16,1)
+				end
+				else
+				begin
+					if(@placa not like '[A-Z][A-Z][A-Z]-[0-9][0-9][0-9][0-9]')
+					begin
+						rollback transaction
+						raiserror('Placa Inválida',16,1)
+					end
+					else
+					begin
+						if((select count(*) from Veiculo where id = @id) != 0)
+						begin
+							Update Veiculo set fabricante = @fabricante, modelo = @modelo ,ano_fabricacao = @ano_fabricacao, placa = @placa, uf = @uf where id = @id
+						end
+						else
+						begin
+							raiserror('ID inválido',16,1)
+							return
+						end				
+					end
+				end
+			end
+			else
+			begin
+				raiserror('Ano de fabricação inválido',16,1)
+				return
+			end
+		end
+		else
+		begin
+			raiserror('Modelo inválido',16,1)
+			return
+		end
+	end
+	else
+	begin
+		raiserror('Fabricante inválido',16,1)
+		return
+	end
+end
+GO
+
+create procedure sp_DeleteVeiculo
+		@id int
+as
+begin
+	if((select count(*) from Veiculo where id = @id) != 0)
+	begin
+		delete from Veiculo where id = @id
+	end
+	else
+	begin
+		raiserror('ID inválido',16,1)
+		return
+	end
+	
+end
+GO
+
+select * from Cliente
+exec dbo.sp_InsertCliente 'Luciano','20181026','017.137.324-31'
+exec dbo.sp_UpdateCliente  3,'Lucianao','20181026','017.137.324-32'
+exec dbo.sp_DeleteCliente 2
+
+select * from Veiculo
+exec dbo.sp_InsertVeiculo '@fabricante','@modelo' ,'2019','NPS-1294','RN'
+exec dbo.sp_UpdateVeiculo 1,'@fabricante','@modelo' ,'2019','NNO-8604','RJ'
+exec dbo.sp_DeleteVeiculo 1
+
+
+
+
+
+
+
+--Verificar CPF
+
+create function VerificarCpf(@cpf varchar(14))
+returns bit
+as
+begin
+	declare @result bit
+	declare @1dv int
+	declare @2dv int
+	declare @soma int
+	declare @resto int
+	if(@cpf not like '[0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9]-[0-9][0-9]')
+	begin
+		set @result = 0
+	end
+	else begin
+		--1° Digito verificador
+		set @soma = substring(@cpf,1,1)*10 + substring(@cpf,2,1)*9 + substring(@cpf,3,1)*8 + substring(@cpf,5,1)*7 + substring(@cpf,6,1)*6 + substring(@cpf,7,1)*5 + substring(@cpf,9,1)*4 + substring(@cpf,10,1)*3 + substring(@cpf,11,1)*2
+		set @resto = @soma%11
+		set @soma = @soma/11
+		if(@resto < 2)
+		begin
+			 set @1dv = 0
+		end
+		else begin
+			set @1dv = 11-@resto
+		end
+		--2° Digito verificador
+		set @soma = substring(@cpf,1,1)*11 + substring(@cpf,2,1)*10 + substring(@cpf,3,1)*9 + substring(@cpf,5,1)*8 + substring(@cpf,6,1)*7 + substring(@cpf,7,1)*6 + substring(@cpf,9,1)*5 + substring(@cpf,10,1)*4 + substring(@cpf,11,1)*3 + @1dv*2
+		set @resto = @soma%11
+		set @soma = @soma/11
+		if(@resto < 2)
+		begin
+			set @2dv = 0
+		end
+		else
+		begin
+			set @2dv = 11-@resto
+		end
+		if(@1dv = SUBSTRING(@cpf,13,1) and @2dv = SUBSTRING(@cpf,14,1))
+		begin
+			set @result = 1
+		end
+		else
+		begin
+			set @result = 0
+		end
+	end
+	return @result
+end
+GO
+
+--:):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):--
+
+select dbo.VerificarCpf('322.511.859-17')--válido
+select dbo.VerificarCpf('322.511.859-18')
+select dbo.VerificarCpf('632.117.441-69')--válido
+select dbo.VerificarCpf('632.117.442-69')
+
